@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --color-noite: #04002a;
+  --color-noite-2: #0b0640;
+  --color-noite-3: #15104f;
+  --color-roxo: #5b0fc9;
+  --color-magenta: #f71ca5;
+  --color-laranja: #ff7a2e;
+  --color-nevoa: #c9c4e6;
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+}
+
+:root { color-scheme: dark; }
+html { scroll-behavior: smooth; }
+body { background: var(--color-noite); color: #fff; }
+
+/* o degradê da marca (roxo, magenta, laranja) */
+.degrade { background-image: linear-gradient(110deg, var(--color-roxo), var(--color-magenta) 55%, var(--color-laranja)); }
+.texto-degrade { background-image: linear-gradient(100deg, #8b3dff, var(--color-magenta) 50%, var(--color-laranja)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* granulado dos stories */
+.granulado::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .14; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* entradas */
+@keyframes subir { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.subir { animation: subir .8s cubic-bezier(.22,1,.36,1) both; }
+
+/* a fita do N se desenhando */
+@keyframes desenhar { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+.desenhar { stroke-dasharray: 1; stroke-dashoffset: 1; animation: desenhar 1.8s cubic-bezier(.65,0,.35,1) .2s forwards; }
+
+/* faixa de serviços */
+@keyframes faixa { to { transform: translateX(-50%); } }
+.faixa { animation: faixa 32s linear infinite; }
+
+/* zoom lento nas fotos de fundo */
+@keyframes zoom { from { transform: scale(1.08); } to { transform: scale(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .desenhar { stroke-dashoffset: 0; }
+  .faixa { animation: none; }
+}
+@keyframes progresso { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* revela ao entrar na tela (sem JS); sem suporte, fica visível */
+@supports (animation-timeline: view()) {
+  @keyframes revelar { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  .revelar { animation: revelar linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+}
+@media (prefers-reduced-motion: reduce) { .revelar { animation: none; } }
+
+/* âncoras abaixo do cabeçalho fixo */
+section[id] { scroll-margin-top: 5rem; }
